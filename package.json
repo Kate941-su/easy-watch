@@ -1,0 +1,16 @@
+{
+  "name": "easy_watch",
+  "version": "1.0.0",
+  "description": "easy to watch your device connected to the Internet",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run dev"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "netcat": "^1.5.0",
+    "ping": "^0.4.4",
+    "typescript": "^5.3.2"
+  }
+}
