@@ -4,13 +4,17 @@
   "description": "easy to watch your device connected to the Internet",
   "main": "index.js",
   "scripts": {
-    "test": "npm run dev"
+    "dev": "nodemon ./index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "netcat": "^1.5.0",
+    "nodemon": "^3.0.1",
     "ping": "^0.4.4",
     "typescript": "^5.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
   }
 }
