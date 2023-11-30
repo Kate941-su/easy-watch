@@ -37,18 +37,21 @@ class ConfigurationManager {
     return this.deviceNames;
   }
 
-  updateStatus(res: any) {
-    var count = 0;
-    for (let element of this.areaList) {
-      if (element.host == res.host) {
-        if (res.alive) {
-          this.areaList[count].status = "alive";
-        } else {
-          this.areaList[count].status = "dead";
+  updateStatus(resList: Array<any>) {
+    for (let res of resList) {
+      var count = 0;
+      for (let element of this.areaList) {
+        if (element.host == res.host) {
+          console.log();
+          if (res.alive) {
+            this.areaList[count].status = "alive";
+          } else {
+            this.areaList[count].status = "dead";
+          }
+          break;
         }
-        return;
+        count++;
       }
-      count++;
     }
   }
 

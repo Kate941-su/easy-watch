@@ -29,7 +29,7 @@ class PingWrapper {
     }
   }
 
-  async executePing(hosts: string[]): Promise<any> {
+  async executePing(hosts: string[]): Promise<Array<Map<string, any>>> {
     let result: any = [];
     for (let host of hosts) {
       console.log(host);
@@ -39,7 +39,7 @@ class PingWrapper {
         result.push(res);
       } catch (error) {
         console.log(`EXEPING ERROR : ${error}`);
-        return [];
+        return [new Map()];
       }
     }
     return result;
