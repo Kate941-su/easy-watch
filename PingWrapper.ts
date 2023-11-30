@@ -31,10 +31,13 @@ class PingWrapper {
 
   async executePing(hosts: string[]): Promise<Array<Map<string, any>>> {
     let result: any = [];
+    const options = {
+      extra: ["-c", "3"],
+    };
     for (let host of hosts) {
       console.log(host);
       try {
-        let res = await ping.promise.probe(host);
+        let res = await ping.promise.probe(host, options);
         console.log(res);
         result.push(res);
       } catch (error) {

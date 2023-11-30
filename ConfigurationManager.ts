@@ -6,22 +6,26 @@ const dev_config = require("./dev_config.json");
 class ConfigurationManager {
   areaList: any[] = [];
   areas: string[] = [];
-  hosts: string[] = [];
-  deviceNames: string[] = [];
-  statuses: string[] = [];
+  hosts: Array<string[]> = [];
+  deviceNames: Array<string[]> = [];
+  statuses: Array<string[]> = [];
 
   constructor() {
     this.init();
   }
   init() {
-    for (let index in dev_config.area) {
-      let object = dev_config.area[index];
+    for (let index in dev_config) {
+      let object = dev_config[index];
+      this.areaList.push(object);
+      this.areas.push(index);
+      let tempHosts = [];
+      let tempDeviceNames = [];
       for (let key in object) {
-        this.areas.push(key);
-        this.areaList.push(object[key]);
-        this.hosts.push(object[key].host);
-        this.deviceNames.push(object[key].device_name);
+        tempHosts.push(object[key].host);
+        tempDeviceNames.push(object[key].device_name);
       }
+      this.hosts.push(tempHosts);
+      this.deviceNames.push(tempDeviceNames);
     }
   }
 
@@ -73,12 +77,13 @@ class ConfigurationManager {
   }
 
   showAreaList() {
-    for (let element of this.areaList) {
-      console.log("===== Area List =====");
-      console.log(`Device Name : ${element.device_name}`);
-      console.log(`Host : ${element.host}`);
-      console.log(`Status : ${element.status}`);
+    for (let index in this.areaList) {
+      console.log(`${this.areas[index]}`);
+      console.log(`Device Name : ${this.areaList[index].device_name}`);
+      console.log(`Host : ${this.areaList[index].host}`);
+      console.log(`Status : ${this.areaList[index].status}`);
       console.log("=====================");
+      console.log("\n");
     }
   }
 

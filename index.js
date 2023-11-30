@@ -7,11 +7,11 @@ let pingWrapper = new PingWrapper.PingWrapper();
 const hosts = configuratinonManager.getHosts();
 async function main() {
 
-    let pingResult = await pingWrapper.executePing(hosts);
+    // let pingResult = await pingWrapper.executePing(hosts);
     
-    configuratinonManager.updateStatus(pingResult);
+    // configuratinonManager.updateStatus(pingResult);
     
-    configuratinonManager.showAreaList();
+    // configuratinonManager.showAreaList();
 
 }
 
