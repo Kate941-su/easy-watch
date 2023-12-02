@@ -1,12 +1,32 @@
 const ConfigurationManager = require('./ts-built/ConfigurationManager.js');
 const PingWrapper = require('./ts-built/PingWrapper.js');
+const express = require("express");
+const path = require("path")
+
+const app = express();
+const port  = 8000;
 
 let configuratinonManager = new ConfigurationManager.ConfigurationManager();
 let pingWrapper = new PingWrapper.PingWrapper();
 
 let areaNamesList = configuratinonManager.getAreaNamesList();
 
-async function main() {
+app.use(express.static(path.join(__dirname, "html")));
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`)
+})
+
+app.get('/ping-result', (req, res) => {
+    res.json(configuratinonManager.areaAllList);
+    console.log(`Get request come from ${req.headers}`);
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, "html", "index.html"));
+});
+
+async function updateAllStatus() {
     // Get result of executing ping command.
     let pingResultByArea = [];
     for (const areaName of areaNamesList) {
@@ -20,19 +40,13 @@ async function main() {
       // Update status
       for (const pingResult of pingResultByArea) {
         for (const key in pingResult) {
+            // Update all area.
             configuratinonManager.updateStatusByAreaName(pingResult[key], key);            
-            console.log("area here");
         }
       }
-
-
     }
-main()
-// pingWrapper.testPing(hosts);d
 
-
-// let hosts = configuratinonManager.getHosts();
-// pingWrapper.executePing(hosts);
+// main()
 
 /* MEMO
 WRONG : module.export = {}

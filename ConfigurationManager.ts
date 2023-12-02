@@ -108,10 +108,10 @@ class ConfigurationManager {
   }
 
   getAreaListByAreaName(areaName: string): Array<Record<any, any>> {
-    for (let areaRecord of this.areaAllList) {
-      for (let key in areaRecord) {
+    for (let areaList of this.areaAllList) {
+      for (let key in areaList) {
         if (key == areaName) {
-          return areaRecord[key];
+          return areaList[key];
         }
       }
     }
