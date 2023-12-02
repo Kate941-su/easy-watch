@@ -11,7 +11,7 @@ let pingWrapper = new PingWrapper.PingWrapper();
 
 let areaNamesList = configuratinonManager.getAreaNamesList();
 
-app.use(express.static(path.join(__dirname, "html")));
+app.use(express.static(path.join(__dirname, "/")));
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
@@ -23,6 +23,7 @@ app.get('/ping-result', (req, res) => {
 });
 
 app.get('/', (req, res) => {
+    console.log(`Get request come from ${req.headers}`);
     res.sendFile(path.join(__dirname, "html", "index.html"));
 });
 

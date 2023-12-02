@@ -4,7 +4,8 @@
   "description": "easy to watch your device connected to the Internet",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon ./index.js"
+    "build:scss": "node compile_css.js",
+    "dev": "npm run build:scss && nodemon ./index.js"
   },
   "author": "",
   "license": "ISC",
