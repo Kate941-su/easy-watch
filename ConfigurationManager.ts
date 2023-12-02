@@ -4,11 +4,51 @@ const dev_config = require("./dev_config.json");
 // dev_config.area.map((it) => console.log(it));
 
 class ConfigurationManager {
-  areaList: any[] = [];
-  areas: string[] = [];
-  hosts: Array<string[]> = [];
-  deviceNames: Array<string[]> = [];
-  statuses: Array<string[]> = [];
+  /*
+  [
+    area : [{device_name, ip_address, status},{device_name, ip_address, status},...], 
+    area :  [{device_name, ip_address, status},{device_name, ip_address, status},...]
+  ...
+  ]
+  */
+  areaAllList: Array<Record<any, any>> = [];
+
+  /* Is this declerations are non-sence ? 
+    [
+      {area: area},
+      {area: area},
+      ...
+    ]
+  */
+  areaNamesList: Array<Record<string, string>> = [];
+
+  /*
+    [
+      {area : [ip_address, ip_address, ...]},
+      {area : [ip_address, ip_address, ...]},
+      ...
+    ]
+  */
+  areaHostsList: Array<Record<string, Array<string>>> = [];
+
+  /*
+    [
+      {area : [device_name, device_name, ...]},
+      {area : [device_name, device_name, ...]},
+      ...
+    ]
+  */
+
+  areaDeviceNamesList: Array<Record<string, Array<string>>> = [];
+
+  /*
+    [
+      {area : [status, status, ...]},
+      {area : [status, status, ...]},
+      ...
+    ]
+  */
+  areaStatusesList: Array<Record<string, Array<string>>> = [];
 
   constructor() {
     this.init();
@@ -16,41 +56,64 @@ class ConfigurationManager {
   init() {
     for (let index in dev_config) {
       let object = dev_config[index];
-      this.areaList.push(object);
-      this.areas.push(index);
-      let tempHosts = [];
-      let tempDeviceNames = [];
+      const areaListMap = new Map();
+      areaListMap.set(index, object);
+      this.areaAllList.push(Object.fromEntries(areaListMap));
+      let areaNameMap = new Map();
+      areaNameMap.set(index, index);
+      this.areaNamesList.push(Object.fromEntries(areaNameMap));
+      let tempHosts: string[] = [];
+      let tempDeviceNames: string[] = [];
       for (let key in object) {
         tempHosts.push(object[key].host);
         tempDeviceNames.push(object[key].device_name);
       }
-      this.hosts.push(tempHosts);
-      this.deviceNames.push(tempDeviceNames);
+      const hostMap = new Map();
+      const deviceNameMap = new Map();
+      hostMap.set(index, tempHosts);
+      deviceNameMap.set(index, tempDeviceNames);
+      this.areaHostsList.push(Object.fromEntries(hostMap));
+      this.areaDeviceNamesList.push(Object.fromEntries(deviceNameMap));
     }
   }
 
-  getAreas() {
-    return this.areas;
+  getAreaNamesList() {}
+  getHostsList() {}
+  getAreaDeviceNames() {}
+
+  getAreaNames() {
+    return this.areaNamesList;
   }
 
-  getHosts() {
-    return this.hosts;
+  getHostsByAreaName() {
+    return this.areaHostsList;
   }
 
-  getDeviceNames() {
-    return this.deviceNames;
+  getDeviceNamesByAreaName() {
+    return this.areaDeviceNamesList;
   }
 
-  updateStatus(resList: Array<any>) {
+  getAreaListByAreaName(areaName: string): Array<Record<any, any>> {
+    for (let areaRecord of this.areaAllList) {
+      for (let key in areaRecord) {
+        if (key == areaName) {
+          return areaRecord[key];
+        }
+      }
+    }
+  }
+
+  updateStatusByAreaName(resList: Array<any>, areaName: string) {
+    let areaList = this.getAreaListByAreaName(areaName);
     for (let res of resList) {
       var count = 0;
-      for (let element of this.areaList) {
+      for (let element of areaList) {
         if (element.host == res.host) {
           console.log();
           if (res.alive) {
-            this.areaList[count].status = "alive";
+            this.areaAllList[count].status = "alive";
           } else {
-            this.areaList[count].status = "dead";
+            this.areaAllList[count].status = "dead";
           }
           break;
         }
@@ -77,11 +140,11 @@ class ConfigurationManager {
   }
 
   showAreaList() {
-    for (let index in this.areaList) {
-      console.log(`${this.areas[index]}`);
-      console.log(`Device Name : ${this.areaList[index].device_name}`);
-      console.log(`Host : ${this.areaList[index].host}`);
-      console.log(`Status : ${this.areaList[index].status}`);
+    for (let index in this.areaAllList) {
+      console.log(`${this.areaNamesList[index]}`);
+      // console.log(`Device Name : ${this.areaAllList[index].device_name}`);
+      // console.log(`Host : ${this.areaAllList[index].host}`);
+      // console.log(`Status : ${this.areaAllList[index].status}`);
       console.log("=====================");
       console.log("\n");
     }
