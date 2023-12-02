@@ -4,20 +4,28 @@ const PingWrapper = require('./ts-built/PingWrapper.js');
 let configuratinonManager = new ConfigurationManager.ConfigurationManager();
 let pingWrapper = new PingWrapper.PingWrapper();
 
+let areaNamesList = configuratinonManager.getAreaNamesList();
+
 async function main() {
-
-    let res = configuratinonManager.updateStatusByAreaName([], "area1");
-
     // Get result of executing ping command.
-    // let pingResult = [];
-    // for (let index in hosts){
-    //     res = await pingWrapper.executePing(hosts[index]);
-    //     pingResult.push(res);        
-    // }
-    // for (let index in pingResult) {
-    //     configuratinonManager.updateStatus(pingResult[index]);    
-    //     configuratinonManager.showAreaList();
-    // }
+    let pingResultByArea = [];
+    for (const areaName of areaNamesList) {
+        const hosts = configuratinonManager.getHostsByAreaName(areaName);
+        let pingResult = await pingWrapper.executePing(hosts);
+        let pingResultMap = new Map();
+        pingResultMap.set(areaName, pingResult);
+        pingResultByArea.push(Object.fromEntries(pingResultMap));
+      }
+
+      // Update status
+      for (const pingResult of pingResultByArea) {
+        for (const key in pingResult) {
+            configuratinonManager.updateStatusByAreaName(pingResult[key], key);            
+            console.log("area here");
+        }
+      }
+
+
     }
 main()
 // pingWrapper.testPing(hosts);d

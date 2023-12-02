@@ -4,7 +4,7 @@ const dev_config = require("./dev_config.json");
 // dev_config.area.map((it) => console.log(it));
 
 class ConfigurationManager {
-  /*
+  /*　This field is as a status
   [
     area : [{device_name, ip_address, status},{device_name, ip_address, status},...], 
     area :  [{device_name, ip_address, status},{device_name, ip_address, status},...]
@@ -15,12 +15,12 @@ class ConfigurationManager {
 
   /* Is this declerations are non-sence ? 
     [
-      {area: area},
-      {area: area},
+      area,
+      area,
       ...
     ]
   */
-  areaNamesList: Array<Record<string, string>> = [];
+  areaNamesList: Array<string> = [];
 
   /*
     [
@@ -59,9 +59,7 @@ class ConfigurationManager {
       const areaListMap = new Map();
       areaListMap.set(index, object);
       this.areaAllList.push(Object.fromEntries(areaListMap));
-      let areaNameMap = new Map();
-      areaNameMap.set(index, index);
-      this.areaNamesList.push(Object.fromEntries(areaNameMap));
+      this.areaNamesList.push(index);
       let tempHosts: string[] = [];
       let tempDeviceNames: string[] = [];
       for (let key in object) {
@@ -77,20 +75,36 @@ class ConfigurationManager {
     }
   }
 
-  getAreaNamesList() {}
-  getHostsList() {}
-  getAreaDeviceNames() {}
-
-  getAreaNames() {
+  getAreaNamesList() {
     return this.areaNamesList;
   }
 
-  getHostsByAreaName() {
+  getAreaHostsList() {
     return this.areaHostsList;
   }
 
-  getDeviceNamesByAreaName() {
+  getAreaDeviceNamesList() {
     return this.areaDeviceNamesList;
+  }
+
+  getHostsByAreaName(areaName: string) {
+    for (const hosts of this.areaHostsList) {
+      for (const key in hosts) {
+        if (key == areaName) {
+          return hosts[key];
+        }
+      }
+    }
+  }
+
+  getDeviceNamesByAreaName(areaName: string) {
+    for (const areaDeviceNames of this.areaDeviceNamesList) {
+      for (const key in areaDeviceNames) {
+        if (key == areaName) {
+          return areaDeviceNames[key];
+        }
+      }
+    }
   }
 
   getAreaListByAreaName(areaName: string): Array<Record<any, any>> {
@@ -104,20 +118,28 @@ class ConfigurationManager {
   }
 
   updateStatusByAreaName(resList: Array<any>, areaName: string) {
-    let areaList = this.getAreaListByAreaName(areaName);
+    // Get area list you want to update.
+    var areaList = this.getAreaListByAreaName(areaName);
     for (let res of resList) {
       var count = 0;
-      for (let element of areaList) {
-        if (element.host == res.host) {
+      for (let key in areaList) {
+        if (areaList[key].host == res.host) {
           console.log();
           if (res.alive) {
-            this.areaAllList[count].status = "alive";
+            areaList[key].status = "alive";
           } else {
-            this.areaAllList[count].status = "dead";
+            areaList[count].status = "dead";
           }
           break;
         }
         count++;
+      }
+    }
+    for (let index in this.areaAllList) {
+      for (let key in this.areaAllList[index]) {
+        if (key == areaName) {
+          this.areaAllList[index] = areaList;
+        }
       }
     }
   }

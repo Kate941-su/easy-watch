@@ -32,7 +32,7 @@ class PingWrapper {
   async executePing(hosts: string[]): Promise<Array<Map<string, any>>> {
     let result: any = [];
     const options = {
-      extra: ["-c", "3"],
+      extra: ["-c", "1"],
     };
     for (let host of hosts) {
       console.log(host);
