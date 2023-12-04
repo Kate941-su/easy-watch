@@ -1,13 +1,13 @@
-const ConfigurationManager = require('./ts-built/ConfigurationManager.js');
-const PingWrapper = require('./ts-built/PingWrapper.js');
+const { ConfigurationManager } = require('./ts-built/ConfigurationManager.js');
+const { PingWrapper } = require('./ts-built/PingWrapper.js');
 const express = require("express");
 const path = require("path")
 
 const app = express();
 const port  = 9000;
 
-let configuratinonManager = new ConfigurationManager.ConfigurationManager();
-let pingWrapper = new PingWrapper.PingWrapper();
+let configuratinonManager = new ConfigurationManager();
+let pingWrapper = new PingWrapper();
 
 let areaNamesList = configuratinonManager.getAreaNamesList();
 

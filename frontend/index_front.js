@@ -1,7 +1,12 @@
 const path = require("path");
 const express = require("express");
+
 const app = express();
 const port  = 8000;
+
+const { EasyWatchApiRepositoryImpl } = require("./ts-built/repository/EasyWatchApiRepositoryImpl");
+const easyWatchApiRepositoryImpl = new EasyWatchApiRepositoryImpl();
+
 
 /*
   For example, if you define the path like below,
@@ -15,6 +20,7 @@ app.listen(port, () => {
 })
 
 app.get('/', (req, res) => {
+    let pingResult = easyWatchApiRepositoryImpl.getAreaAllList()
     console.log(`Get request come from ${req.headers}`);
     res.sendFile(path.join(__dirname, "html", "index.html"));
 });
