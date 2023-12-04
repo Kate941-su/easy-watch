@@ -50,12 +50,15 @@ class ConfigurationManager {
   */
   areaStatusesList: Array<Record<string, Array<string>>> = [];
 
+  isProxy: Boolean;
+
   constructor() {
     this.init();
   }
   init() {
     for (let index in dev_config) {
       let object = dev_config[index];
+      this.isProxy = dev_config.is_proxy;
       const areaListMap = new Map();
       areaListMap.set(index, object);
       this.areaAllList.push(Object.fromEntries(areaListMap));
